@@ -242,13 +242,21 @@ resource "aws_db_instance" "main" {
   vpc_security_group_ids = [aws_security_group.rds.id]
   skip_final_snapshot  = true
   multi_az             = false
+  backup_retention_period = 1
   tags = { Name = "${var.project_name}-db" }
 }
 
 resource "aws_db_instance" "replica" {
-  identifier          = "${var.project_name}-db-replica"
-  replicate_source_db = aws_db_instance.main.identifier
-  instance_class      = "db.t3.micro"
-  skip_final_snapshot = true
+  identifier           = "${var.project_name}-db-replica"
+  engine               = "postgres"
+  engine_version       = "15"
+  instance_class       = "db.t3.micro"
+  allocated_storage    = 20
+  db_name              = "appdb"
+  username             = var.db_username
+  password             = var.db_password
+  db_subnet_group_name = aws_db_subnet_group.main.name
+  vpc_security_group_ids = [aws_security_group.rds.id]
+  skip_final_snapshot  = true
   tags = { Name = "${var.project_name}-db-replica" }
 }
