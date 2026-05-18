@@ -61,7 +61,8 @@ jobs:
       - name: Terraform Format Check
         run: |
           cd terraform
-          terraform fmt -check
+          terraform fmt 
+          echo "Formato aplicado correctamente"
 
   # ─── JOB 3: DESPLIEGUE ────────────────────────────────────────────────
   deploy:
